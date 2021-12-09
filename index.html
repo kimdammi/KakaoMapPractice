@@ -266,41 +266,12 @@
             console.log(todayString);
             let seoulData = "";
             // 서울 미세먼지 ajax 불러오기
-            (() => {
-                const xhr = new XMLHttpRequest();
-                const method = "GET";
-                const url = "http://openapi.seoul.go.kr:8088/4768664573676f6f38366a58517357/json/DailyAverageAirQuality/1/50/" + todayString;
-
-                xhr.onreadystatechange = (e) => {
-                    const {
-                        target
-                    } = e;
-
-                    if (target.readyState == XMLHttpRequest.DONE) {
-                        if (target.status == 200) {
-                            const req = JSON.parse(target.response);;
-
-                            seoulData = req.DailyAverageAirQuality.row;
-                        } else {
-                            const s = parseInt(target.status / 100);
-                            let errMsg = null;
-
-                            if (s == 4) {
-                                errMsg = "[" + target.status + "]" + target.statusText + "- 요청 주소가 잘못되었습니다.";
-                            } else if (s == 5) {
-                                errMsg = "[" + target.status + "]" + target.statusText + "- 서버의 응답이 없습니다.";
-                            } else {
-                                errMsg = "[" + target.status + "]" + target.statusText + "- 요청에 실패했습니다.";
-                            }
-                            alert(errMsg);
-                        }
-                    }
-                };
-                xhr.open(method, url);
-                xhr.send();
-            })();
-
-
+            ajaxhelper({
+				url:"http://openapi.seoul.go.kr:8088/4768664573676f6f38366a58517357/json/DailyAverageAirQuality/1/50/" + todayString,
+				success: req => {
+					seoulData = req;
+				}
+			});
         }
 
         /* 실패시 수행될 콜백*/
